@@ -4,7 +4,7 @@
 Este pequeno Sistema Web tem como finalidade o controle de senhas de atendimento de um banco ou outro serviço que tenha uma fila de atendimento para gerir o acesso.
 
 ## Finalidade do Sistema:
-O sistema de Controle de Fila Bancária, CFB, comtrola a ordem de chegada dos clientes e distingue na ordem de atendimento os clientes, atendendo primerio todos os clientes preferenciais para depois começar os atendimentos Normal (sem prioridade).
+O Sistema de Controle de Fila Bancária, CFB, comtrola a ordem de chegada dos clientes e distingue na ordem de atendimento os clientes, atendendo primerio todos os clientes preferenciais para depois começar os atendimentos Normal (sem prioridade).
 
 ## Instalação do Sistema CFB
 Baixe o repositorio (git clone ...) no local desejato em seu computador, entre na pasta criada (servTicket) e use os comandos do Maven para gerar o arquivo (servTicket.war).

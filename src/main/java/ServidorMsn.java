@@ -1,6 +1,5 @@
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 
@@ -10,13 +9,27 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Esta classe cria um ServerSocket e duas ArrayList para
+ * guardarem os dados da lista, bem como os metodos responsaveis
+ * por pesquisar a lista.
+ * As regras de negocio estão a cargo da classe Ticket
+ * 
+ * @author Carlos Alexandre de Souza Cecim
+ */
 @WebServlet("/ServidorMsn")
 public class ServidorMsn extends HttpServlet implements ServletContextListener {
   
   private static final long serialVersionUID = 1L;
   private static String consultaChamada = "";
-  
-  private static void operando(int porta, ArrayList<Ticket> fila, ArrayList<String> foiChamado) {
+  /**
+   * Responsavel pela criação da ServerSocket e gerenciar 
+   * as suas mensagens
+   * @param porta
+   * @param fila
+   * @param foiChamado
+   */
+  private void operando(int porta, ArrayList<Ticket> fila, ArrayList<String> foiChamado) {
 
     try {
       // Instancia o ServerSocket ouvindo a porta 12345
@@ -57,26 +70,27 @@ public class ServidorMsn extends HttpServlet implements ServletContextListener {
     }
   }
 
-  /*
-   * Metodo que le a mensagem e compara a permisão e o tipo gtk - cabeçalho de
-   * Permição de conexão tipo - Comando para: 
+  /** 
+   * Metodo que faz o tratamento da mensagem e valida com o prefixo (gtk) 
+   * Os comandos aceitos são: 
+   * <p>
    * 1) c1 - Zera a lista de Atendimento(renicia a contagem dos ticket's). 
+   * <p>
    * 2) c2 - Cria um ticket normal.
+   * <p>
    * 3) c3 - Cria um ticket preferencial. 
+   * <p>
    * 4) c4 - Altera status de atendimento
    * (chamada para proximo ticket). 
+   * <p>
    * 5) c5 - Retorna o ticket em atendimento.
    */
   private static void protocoloMsn(String msn, ArrayList<Ticket> fila, ArrayList<String> foiChamado) {
     System.out.println("Chegou na leitura do protocolo.");
     Ticket ticket = new Ticket();
     String[] protocoloMsn = msn.split("-");
-
     String msnHead = protocoloMsn[0];
     String msnParm = protocoloMsn[1];
-
-    System.out.println("Protocolo[0] = " + msnHead);
-    System.out.println("Protocolo[1] = " + msnParm);
 
     if (msnHead.equals("gtk")) {
 
@@ -86,7 +100,6 @@ public class ServidorMsn extends HttpServlet implements ServletContextListener {
       }
 
       if (msnParm.equals("c2")) {
-
         ticket.addFilaNormal(fila);
         consultaChamada = fila.get(fila.size() -1).getTicketNormal();
       }
@@ -106,8 +119,7 @@ public class ServidorMsn extends HttpServlet implements ServletContextListener {
         String callTicket = emAtendimento(foiChamado);
         consultaChamada = callTicket;
 
-      }
-     
+      }    
 
     } else {
       System.out.println("Conexão não autorizada");
@@ -115,7 +127,9 @@ public class ServidorMsn extends HttpServlet implements ServletContextListener {
 
   }
 
-  // Metodo que mostra o ticket chamado da lista de atendimento
+  /**
+   * Metodo que mostra o ticket chamado da lista(fila) de atendimento 
+  */
   private static String emAtendimento(ArrayList<String> foiChamado) {
     int xt = foiChamado.size() - 1;
     String chamandoDaFila;
@@ -127,7 +141,10 @@ public class ServidorMsn extends HttpServlet implements ServletContextListener {
     return chamandoDaFila;
 
   }
-
+  /**
+   * Cria a thread e gera os ArrayList que guardaram
+   * as sequencias das filas
+   */
   public class Thredando implements Runnable {
     ArrayList<Ticket> fila = new ArrayList<Ticket>();
     ArrayList<String> foiChamado = new ArrayList<String>();
