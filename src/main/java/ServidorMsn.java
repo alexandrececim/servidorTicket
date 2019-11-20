@@ -111,7 +111,8 @@ public class ServidorMsn extends HttpServlet implements ServletContextListener {
       }
 
       if (msnParm.equals("c4")) {
-        ticket.atendeFila(fila, foiChamado);
+        //ticket.atendeFila(fila, foiChamado);
+        consultaChamada = atendeFila( fila, ticket, foiChamado);
 
       }
 
@@ -124,6 +125,22 @@ public class ServidorMsn extends HttpServlet implements ServletContextListener {
     } else {
       System.out.println("Conexão não autorizada");
     }
+
+  }
+
+  /**
+   * Metodo que mostra o ticket chamado da lista(fila) de atendimento 
+   * (falha no acesso encontrada durante Teste)
+  */
+  private static String atendeFila(ArrayList<Ticket> fila, Ticket ticket, ArrayList<String> foiChamado) {
+    int xt = fila.size() - 1;
+    String chamandoDaFila = "";
+    if (xt > -1) {
+      ticket.atendeFila(fila, foiChamado);
+    } else {
+      chamandoDaFila = "Atendimento não inicializado";
+    }
+    return chamandoDaFila;
 
   }
 
